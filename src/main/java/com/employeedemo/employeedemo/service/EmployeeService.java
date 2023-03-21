@@ -5,6 +5,10 @@ import com.employeedemo.employeedemo.repository.EmployeeRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
@@ -18,6 +22,17 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+
+   public Page<Employee>  getEmployees(int offset,int pageSize)
+    {
+      return employeeRepository.findAll(PageRequest.of(offset, pageSize));
+    }
+
+    public Page<Employee>  getEmployeesSorted(int offset,int pageSize)
+    {
+        return employeeRepository.findAll(PageRequest.of(offset, pageSize, Sort.Direction.ASC,"empname"));
+    }
 
    public void saveEmployeeDetails() throws FileNotFoundException {
        FileReader fileReader=new FileReader("src/main/resources/employee.json");
